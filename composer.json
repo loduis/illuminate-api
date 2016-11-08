@@ -2,10 +2,9 @@
     "name": "loduis/alegra-php",
     "description": "Illuminate Api",
     "keywords": [
-        "alegra",
+        "illuminate",
         "api"
     ],
-    "homepage": "http://developer.alegra.com",
     "license": "MIT",
     "authors": [
         {
