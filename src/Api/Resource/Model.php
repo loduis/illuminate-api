@@ -4,6 +4,7 @@ namespace Illuminate\Api\Resource;
 
 use ArrayAccess;
 use JsonSerializable;
+use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Traits\AttributeAccess;
@@ -230,7 +231,9 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
      */
     protected function getArrayableAttributes()
     {
-        return $this->attributes;
+        $hidden   = array_unique(static::getStaticMethodOrProperty('hidden'));
+
+        return Arr::except($this->attributes, $hidden);
     }
 
     /**
@@ -240,9 +243,7 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
      */
     protected function getArrayableVisibleAttributes()
     {
-        $visible   = method_exists(static::class, 'visible') ?
-            static::visible() :
-            static::getStaticProperty('visible', []);
+        $visible = static::getStaticMethodOrProperty('visible');
         if ($visible == ['*']) {
             return $this->getArrayableAttributes();
         }

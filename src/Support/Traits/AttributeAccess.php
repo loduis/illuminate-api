@@ -162,6 +162,18 @@ trait AttributeAccess
         return property_exists(static::class, $property);
     }
 
+    protected static function staticMethodExists($method)
+    {
+        return method_exists(static::class, $method);
+    }
+
+    protected static function getStaticMethodOrProperty($name, $default = [])
+    {
+        return static::staticMethodExists($name) ?
+            static::$name() :
+            static::getStaticProperty($name, $default);
+    }
+
     /**
      * Attribute for debug info
      *

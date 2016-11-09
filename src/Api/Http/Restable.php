@@ -53,7 +53,7 @@ trait Restable
      */
     public function save()
     {
-        return $this->store($this->id === null ? 'POST' : 'PUT', $this->id);
+        return $this->store($this->id === null ? 'POST' : 'PATCH', $this->id);
     }
 
     /**
