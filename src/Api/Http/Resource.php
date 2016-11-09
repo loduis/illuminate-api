@@ -49,6 +49,16 @@ abstract class Resource extends Model
         return Collection::makeOf(static::class, $response);
     }
 
+    protected static function instanceGetRequest($id = null, $params = [])
+    {
+        return static::instanceFromRequest('GET', $id, $params);
+    }
+
+    protected static function instancePostRequest($id = null, $params = [])
+    {
+        return static::instanceFromRequest('POST', $id, $params);
+    }
+
     /**
      * Invoke the request of the current resource
      *
@@ -63,12 +73,11 @@ abstract class Resource extends Model
         $method = strtoupper($method);
 
         // For fix query string parameters
-
         if ($method == 'GET' && !$params instanceof Filter) {
             $params = static::filters($params);
         }
 
-        $path = static::resolvePath()  . ($id ? "/$id" : '');
+        $path = static::resolvePath($params)  . ($id ? "/$id" : '');
 
         $response = Client::request($method, $path, $params);
 
@@ -107,18 +116,18 @@ abstract class Resource extends Model
      *
      * @return string
      */
-    public static function resolvePath()
+    public static function resolvePath($params)
     {
         static $resolved = [];
 
         $class = static::class;
 
         if (($path = Arr::get($resolved, $class)) !== null) {
-            return $path;
+            return static::replaceUrlParameters($path, $params);
         }
 
         if ($path = static::getStaticProperty('path')) {
-            return $resolved[$class] = $path;
+            return static::replaceUrlParameters($resolved[$class] = $path, $params);
         }
 
         // Useful for namespaces: Foo\Charge
@@ -130,7 +139,37 @@ abstract class Resource extends Model
         $path = Str:: snake($path, '-');
         $path = Str::plural($path);
 
-        return $resolved[$class] =  $path;
+        $resolved[$class] =  $path;
+
+        return static::replaceUrlParameters($resolved[$class] = $path, $params);
+    }
+
+    protected static function replaceUrlParameters($path, $params)
+    {
+        static $cache;
+
+        if (!Str::contains($path, '{')) {
+            return $path;
+        }
+
+        $class = static::class;
+
+        if (($only = Arr::get($cache, $class)) === null &&
+            preg_match_all('/\{([a-z_]+)\}/', $path, $matches) !== false
+        ) {
+            $cache[$class] = $only = $matches[1];
+        }
+
+        foreach ((array) $only as $name) {
+            $value = $params[$name];
+            if (!is_scalar($value)) {
+                throw new \UnexpectedValueException('The ' . $name . ' attribute is required.');
+            }
+            $path = str_replace('{' . $name . '}', $value, $path);
+            unset($params[$name]);
+        }
+
+        return $path;
     }
 
     /**
