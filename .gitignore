@@ -1,5 +1,6 @@
 composer.lock
 .php_cs.cache
+.idea
 
 /tests/build/
 /vendor/
