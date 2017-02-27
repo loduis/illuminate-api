@@ -2,7 +2,6 @@
 
 namespace Illuminate\Api\Http;
 
-use BadMethodCallException;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Api\Resource\Model;
@@ -31,12 +30,12 @@ abstract class Resource extends Model
     }
 
     /**
-     * Create instance from reques
+     * Create instance from request
      *
      * @param  string $method
      * @param  null|int|string $id
      * @param  array|\Illuminate\Contracts\Support\Arrayable $params
-     * @return $this|array
+     * @return $this|Resource[]
      */
     protected static function instanceFromRequest($method, $id = null, $params = [])
     {
@@ -113,10 +112,10 @@ abstract class Resource extends Model
 
     /**
      * Resolve the path of the resource for call request.
-     *
+     * @param  $params
      * @return string
      */
-    public static function resolvePath($params)
+    public static function resolvePath($params = [])
     {
         static $resolved = [];
 
@@ -138,8 +137,6 @@ abstract class Resource extends Model
 
         $path = Str:: snake($path, '-');
         $path = Str::plural($path);
-
-        $resolved[$class] =  $path;
 
         return static::replaceUrlParameters($resolved[$class] = $path, $params);
     }
@@ -173,7 +170,7 @@ abstract class Resource extends Model
     }
 
     /**
-     * Check if resouce is an instance
+     * Check if resource is an instance
      *
      * @param  mixed  $resource
      * @return bool

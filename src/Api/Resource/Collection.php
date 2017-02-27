@@ -14,7 +14,7 @@ class Collection extends BaseCollection
      * Create a new collection instance of.
      *
      * @param  mixed  $items
-     * @return static
+     * @return \Illuminate\Api\Http\Resource[]
      */
     public static function makeOf($className, $items)
     {
