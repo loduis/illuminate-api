@@ -15,6 +15,8 @@ class Client
     */
     protected static $transport;
 
+    protected static $options = [];
+
     public static function request($method, $path, $params = [])
     {
         return static::get()->request(
@@ -24,19 +26,25 @@ class Client
         );
     }
 
+    protected static function options(array $options)
+    {
+        if (!isset(static::$options['headers']['Accept'])) {
+            static::$options['headers']['Content-Type'] =
+            static::$options['headers']['Accept']       = 'application/json';
+        }
+
+        return static::$options = array_merge(static::$options, $options);
+    }
+
     /**
      * Set the htpp client for request resource.
      *
      * @param array $options
+     * @return HttpClient
      */
     public static function create(array $options = [])
     {
-        if (!isset($options['headers']['Accept'])) {
-            $options['headers']['Content-Type'] =
-            $options['headers']['Accept']       = 'application/json';
-        }
-
-        return static::$transport = new HttpClient($options);
+        return static::$transport = new HttpClient(static::options($options));
     }
 
     /**

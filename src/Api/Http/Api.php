@@ -88,16 +88,15 @@ abstract class Api
      * Create http client for request handle
      *
      * @param  array  $options
-     * @return void
+     * @return \GuzzleHttp\Client
      */
     public static function createClient(array $options = [])
     {
-        Client::create(array_merge(
-            $options,
-            [
-                'base_uri' => static::baseUri(),
-                'auth'     => static::auth(),
-            ]
-        ));
+        $options['base_uri'] = static::baseUri();
+        if (static::$token) {
+            $options['auth'] = static::auth();
+        }
+
+        return Client::create($options);
     }
 }
