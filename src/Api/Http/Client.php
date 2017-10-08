@@ -19,11 +19,18 @@ class Client
 
     public static function request($method, $path, $params = [])
     {
-        return static::get()->request(
+        return static::transport()->request(
             $method = strtoupper($method),
             $path,
             static::resolveParameters($method, $params)
         );
+    }
+
+    public static function toArray($method, $path, $params = [])
+    {
+        $response = static::request($method, $path, $params);
+
+        return json_decode((string) $response->getBody(), true);
     }
 
     protected static function options(array $options)
@@ -40,11 +47,13 @@ class Client
      * Set the htpp client for request resource.
      *
      * @param array $options
-     * @return HttpClient
+     * @return self
      */
     public static function create(array $options = [])
     {
-        return static::$transport = new HttpClient(static::options($options));
+        static::$transport = new HttpClient(static::options($options));
+
+        return static::class;
     }
 
     /**
@@ -52,7 +61,7 @@ class Client
      *
      * @return \GuzzleHttp\ClientInterface
      */
-    protected static function get()
+    protected static function transport()
     {
         return static::$transport ?: static::create();
     }
