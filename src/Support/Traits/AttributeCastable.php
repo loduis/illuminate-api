@@ -4,6 +4,7 @@ namespace Illuminate\Support\Traits;
 
 use Carbon\Carbon;
 use DateTimeInterface;
+use Illuminate\Support\Fluent;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as BaseCollection;
@@ -212,7 +213,7 @@ trait AttributeCastable
             case 'boolean':
                 return (bool) $value;
             case 'object':
-                return $this->fromJson($value, true);
+                return new Fluent($this->fromJson($value));
             case 'array':
             case 'json':
                 return $this->fromJson($value);

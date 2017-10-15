@@ -4,6 +4,7 @@ namespace Illuminate\Api\Resource;
 
 use ArrayAccess;
 use JsonSerializable;
+use BadMethodCallException;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
@@ -323,7 +324,6 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
     private static function callMacro($objectOrClass, $method, $params)
     {
         $method = 'macro' . ucfirst($method) . 'Handler';
-
         if (!method_exists($objectOrClass, $method)) {
             throw new BadMethodCallException("Method {$method} does not exist.");
         }

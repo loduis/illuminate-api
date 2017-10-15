@@ -4,6 +4,8 @@ namespace Illuminate\Api\Http;
 
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
+
 
 class Client
 {
@@ -75,13 +77,22 @@ class Client
     private static function resolveParameters($method, $params)
     {
         $options = [];
-        if ($params instanceof Arrayable) {
-            $params = $params->toArray();
-        } else {
-            $params = (array) $params;
-        }
+        $params = $params instanceof Arrayable ?
+            $params->toArray() :
+            (array) $params;
         if ($params) {
-            $options[$method == 'GET' ? 'query' : 'json'] = $params;
+            if ($method === 'GET') {
+                $options['query'] = $params;
+            } elseif (Arr::has($params, 'multipart')) {
+                $multipart = $params['multipart'];
+                if (Arr::isAssoc($multipart)) {
+                    $multipart = [$multipart];
+                }
+                $params['multipart'] = $multipart;
+                $options = $params;
+            } else {
+                $options['json'] = $params;
+            }
         }
 
         return $options;
