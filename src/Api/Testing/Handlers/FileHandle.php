@@ -73,6 +73,10 @@ class FileHandle
 
     private function file($path)
     {
-        return $this->directory . '/' . $path . '.json';
+        if (strpos($path, '.json') === false) {
+            $path .= '.json';
+        }
+
+        return $this->directory . '/' . $path;
     }
 }
