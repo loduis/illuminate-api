@@ -145,6 +145,7 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
         return $this->attributesToArray($attributes);
     }
 
+
     /**
      * Export visible attributes that are used in the transform process
      *
@@ -155,6 +156,16 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
         $attributes = $this->getArrayableVisibleAttributes();
 
         return $this->attributesToArray($attributes);
+    }
+
+    public function toFile($filename)
+    {
+        $stored = file_put_contents(
+            $filename,
+            json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        ) !== false;
+
+        return $stored ? realpath($filename) : false;
     }
 
     /**
