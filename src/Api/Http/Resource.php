@@ -78,6 +78,10 @@ abstract class Resource extends Model
 
         $path = static::resolvePath($params)  . ($id ? "/$id" : '');
 
+        if ($ext = Client::option('extension')) {
+            $path .= '.' . $ext;
+        }
+
         $response = Client::request($method, $path, $params);
 
         return static::fireResourceEvent($method, $response);

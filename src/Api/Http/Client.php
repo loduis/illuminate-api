@@ -35,6 +35,11 @@ class Client
         return json_decode((string) $response->getBody(), true);
     }
 
+    public static function option($name)
+    {
+        return Arr::get(static::$options, $name);
+    }
+
     protected static function options(array $options)
     {
         if (!isset(static::$options['headers']['Accept'])) {
