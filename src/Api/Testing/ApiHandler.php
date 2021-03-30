@@ -13,7 +13,6 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Api\Testing\Handlers\FileHandle;
 use Illuminate\Api\Testing\Handlers\ArrayHandle;
 use Illuminate\Api\Testing\Handlers\CallableHandle;
@@ -82,7 +81,7 @@ class ApiHandler
     {
         $response = $response instanceof \Exception
             ? new RejectedPromise($response)
-            : \GuzzleHttp\Promise\promise_for($response);
+            : \GuzzleHttp\Promise\Create::promiseFor($response);
 
         return $response->then(
             function ($value) use ($request, $method, $path, $options) {

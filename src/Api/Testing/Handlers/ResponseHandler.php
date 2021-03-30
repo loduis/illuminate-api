@@ -2,7 +2,7 @@
 
 namespace Illuminate\Api\Testing\Handlers;
 
-use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 
 class ResponseHandler
@@ -28,6 +28,6 @@ class ResponseHandler
     {
         $body = json_encode($body);
 
-        return $this->response = $this->response->withBody(Psr7\stream_for($body));
+        return $this->response = $this->response->withBody(Utils::streamFor($body));
     }
 }

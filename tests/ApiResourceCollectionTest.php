@@ -8,7 +8,7 @@ use Illuminate\Support\Collection as BaseCollection;
 
 class ApiResourceCollectionTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
