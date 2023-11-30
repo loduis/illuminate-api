@@ -314,6 +314,7 @@ class ApiHandler
         $id = null;
         if (Str::contains($path, '/')) {
             list($path, $id) = explode('/', $path);
+            $id = str_replace(['.json', '.xml'], '', $id);
         }
 
         return [$path, $id];
