@@ -160,6 +160,9 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 
     public function toFile($filename)
     {
+        if (strpos($filename, '.json') === false) {
+            $filename .= '.json';
+        }
         $stored = file_put_contents(
             $filename,
             json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)

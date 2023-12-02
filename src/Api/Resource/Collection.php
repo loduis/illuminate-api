@@ -333,6 +333,19 @@ class Collection extends BaseCollection
         return $items;
     }
 
+    public function toFile($filename)
+    {
+        if (strpos($filename, '.json') === false) {
+            $filename .= '.json';
+        }
+        $stored = file_put_contents(
+            $filename,
+            json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        ) !== false;
+
+        return $stored ? realpath($filename) : false;
+    }
+
     /**
      * Attribute for debug info
      *
