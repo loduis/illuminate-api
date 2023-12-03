@@ -39,6 +39,10 @@ abstract class Resource extends Model
      */
     protected static function instanceFromRequest($method, $id = null, $params = [])
     {
+        $class = $params['instance_of'] ?? static::class;
+
+        unset($params['instance_of']);
+
         $response = static::requestToArray($method, $id, $params);
 
         if (Arr::isAssoc($response)) {
