@@ -137,8 +137,8 @@ class ApiHandler
 
         if ($reflection->getNumberOfParameters() > 0) {
             $parameters = $reflection->getParameters();
-            $interface = $parameters[0]->getClass();
-            if ($interface->name === ResponseInterface::class) {
+            $type = $parameters[0]->getType();
+            if ($type !== null && !$type->isBuiltin() &&  $type->getName() === ResponseInterface::class) {
                 $this->responseCallable->put($message, $handler);
                 return $this;
             }

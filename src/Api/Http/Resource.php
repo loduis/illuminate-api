@@ -49,7 +49,7 @@ abstract class Resource extends Model
             return new static($response);
         }
 
-        return Collection::makeOf(static::class, $response);
+        return Collection::makeOf($class, $response);
     }
 
     protected static function instanceGetRequest($id = null, $params = [])
