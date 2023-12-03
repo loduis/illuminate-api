@@ -78,9 +78,9 @@ abstract class Api
                 static::$token
             ];
         } elseif ($count === 1) {
-            list(static::$token) = $auth;
+            [static::$token, ] = $auth;
         } else {
-            list(static::$user, static::$token) = $auth;
+            [static::$user, static::$token] = $auth;
         }
     }
 

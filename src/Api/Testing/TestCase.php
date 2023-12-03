@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase as BaseTest;
 /**
  * Base class for Alegra test cases, provides some utility methods for creating
  * objects.
+ *
+ * @property $faker
  */
 abstract class TestCase extends BaseTest
 {

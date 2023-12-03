@@ -5,6 +5,9 @@ namespace Illuminate\Support\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @property static $snakeAttributes
+ */
 trait AttributeMutator
 {
     /**

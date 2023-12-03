@@ -26,7 +26,7 @@ class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
     /**
      * The primary key for the model.
      *
-     * @var string
+     * @var array
      */
     protected $primaryKey = [
         'id' => 'int'

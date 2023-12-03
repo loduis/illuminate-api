@@ -84,7 +84,7 @@ class FilterArrayIteratorStub implements IteratorAggregate
         $this->attributes = (array) $attributes;
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->attributes);
     }

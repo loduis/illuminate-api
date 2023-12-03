@@ -44,7 +44,7 @@ class ApiHandler
 
     public function __invoke(RequestInterface $request, array $options)
     {
-        list($method, $path) = $this->prepareRequest($request, $options);
+        [$method, $path] = $this->prepareRequest($request, $options);
         $this->originalResource = [];
         $response = null;
         if (($handler = $this->requestCallable->find($method, $path))) {
@@ -112,7 +112,7 @@ class ApiHandler
     {
         if (is_string($handler)) {
             if (Str::contains($handler, '@')) {
-                list($class, $method) = explode('@', $handler);
+                [$class, $method] = explode('@', $handler);
                 $method = (new ReflectionClass($class))->getMethod($method);
                 $handler = $this->getCallable($method);
             } elseif (class_exists($handler)) {
@@ -176,7 +176,7 @@ class ApiHandler
      */
     protected function get($path, $options)
     {
-        list($path, $id) = static::parsePath($path);
+        [$path, $id] = static::parsePath($path);
 
         $resources = $this->collections->get($path);
         if (!count($resources) && ($fileStorage = $this->files->find('get', $path))) {
@@ -206,7 +206,7 @@ class ApiHandler
      */
     protected function post($path, $options)
     {
-        list($path, $id) = static::parsePath($path);
+        [$path, $id] = static::parsePath($path);
 
         if ($id === null) {
             $status         = 201;
@@ -224,7 +224,7 @@ class ApiHandler
 
     protected function put($path, $options)
     {
-        list($path, $id) = static::parsePath($path);
+        [$path, $id] = static::parsePath($path);
 
         $resources = $this->collections->get($path);
 
@@ -264,7 +264,7 @@ class ApiHandler
      */
     protected function delete($path)
     {
-        list($path, $id) = static::parsePath($path);
+        [$path, $id] = static::parsePath($path);
 
         $resources = $this->collections->get($path);
 
@@ -313,7 +313,7 @@ class ApiHandler
     {
         $id = null;
         if (Str::contains($path, '/')) {
-            list($path, $id) = explode('/', $path);
+            [$path, $id] = explode('/', $path);
             $id = str_replace(['.json', '.xml'], '', $id);
         }
 
